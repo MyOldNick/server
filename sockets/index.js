@@ -15,10 +15,23 @@ function socketOn() {
 
 
             //находим в базе диалоги по запросу и отправляем на клиент
-            socket.on('dialogs', async user => {
-                const dialogsArr = await dialogsService.findDialogs(user)
+            socket.on('dialogs', async id => {
+                const dialogsArr = await dialogsService.findDialogs(id)
 
                 socket.emit('findDialog', dialogsArr)
+            })
+
+
+            socket.on('createDialog', async (userOne, userTwo) => {
+                const dialog = await dialogsService.existenceDialog(userOne.id, userTwo._id)
+                console.log(dialog)
+                if(dialog.length > 0) {
+                    console.log('Диалог есть')
+                } else {
+                    const newDialog = await dialogsService.createDialog(userOne, userTwo)
+
+                    socket.emit('addDialog', newDialog)
+                }
             })
 
 

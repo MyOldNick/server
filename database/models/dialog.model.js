@@ -5,7 +5,7 @@ const {Schema, model} = require('mongoose');
 
 const dialogSchema = new Schema({
     users: [
-        {name: String}
+        {userId: String, name: String}
         ],
     message: [{
         id: String,

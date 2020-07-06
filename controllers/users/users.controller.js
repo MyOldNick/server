@@ -29,7 +29,7 @@ module.exports = {
         //чекаем пароль, если все ок, отправляем логин пользователя на клиент. Больше ничего
         if(user) {
             await checkPassword(password, user.password)
-            res.json(user.login)
+            res.json({login: user.login, id: user._id})
         } else {
             res.json('Not found')
         }
