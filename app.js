@@ -17,6 +17,10 @@ app.use(express.json())
 
 app.use('/', usersRouter)
 
+app.use('/hello', (req, res) => {
+    res.json('Hello')
+})
+
 
 //важная фигня!!111 рас рас адын адын
 //нужно писать именно SERVER, а не app
