@@ -3,12 +3,12 @@ const dialogModel = require('../../database/models/dialog.model')
 module.exports = {
 
     //ищем все диалоги, в которых есть наш пользователь
-    findDialogs: (id) => dialogModel.find({'users.userId': id}),
+    findDialogs: (id) => dialogModel.find({'users.userId': id}).sort({updateAt: -1}),
 
 
     //находим диалог по ID, пушим в массив сообщений обьект нашей сообщеньки
-    sendMessage: async (message, room) => {
-        await dialogModel.findOneAndUpdate({_id: room}, {$push: {message: message}})
+    sendMessage: async (message, room, date) => {
+        await dialogModel.findOneAndUpdate({_id: room}, {updateAt: date, $push: {message: message}})
     },
 
     existenceDialog: (idOne, idTwo) => {

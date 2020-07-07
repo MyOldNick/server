@@ -12,6 +12,14 @@ const dialogSchema = new Schema({
         text: String,
         author: String
     }],
+    quantityNew: {
+        type: Number,
+        default: 0
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 
 })
 module.exports = model('dialog', dialogSchema);

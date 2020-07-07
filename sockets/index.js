@@ -47,7 +47,9 @@ function socketOn() {
             socket.on('message', async (message, room) => {
                 console.log(message, room)
 
-                await dialogsService.sendMessage(message, room)
+                const date = Date.now()
+
+                await dialogsService.sendMessage(message, room, date)
 
 
                 //отправить сообщение всем, кто подключен к определенной комнате
