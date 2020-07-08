@@ -24,6 +24,6 @@ app.use('/hello', (req, res) => {
 
 //важная фигня!!111 рас рас адын адын
 //нужно писать именно SERVER, а не app
-server.listen(3000, () => {
+server.listen(process.env.PORT || 3000, () => {
     console.log('server start');
 })
