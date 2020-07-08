@@ -3,11 +3,20 @@ const io = require('socket.io')(server)
 
 const {dialogsService} = require('../services')
 
+
 function socketOn() {
+
+    let connectUsers = []
+
     io.on('connection', (socket) => {
 
+           let newUser
+
             //отправляем сообщеньку на килент, типо он подключен (это бесполезная фигня)
-            socket.emit('connected', 'You connected')
+            socket.on('connected', connectionUser => {
+                newUser = connectionUser
+                connectUsers.push({id: socket.id, userId: connectionUser})
+            })
 
 
             //пишем в консольку о новом подключении (это овобще не нужно, но пусть будет)
@@ -29,6 +38,12 @@ function socketOn() {
                     console.log('Диалог есть')
                 } else {
                     const newDialog = await dialogsService.createDialog(userOne, userTwo)
+
+                    connectUsers.map(el => {
+                        if (el.userId === userTwo._id) {
+                            io.sockets.to(el.id).emit('addDialog', newDialog);
+                        }
+                    })
 
                     socket.emit('addDialog', newDialog)
                 }
@@ -55,6 +70,16 @@ function socketOn() {
                 //отправить сообщение всем, кто подключен к определенной комнате
                 io.sockets.in(room).emit('msg', message, room)
             })
+
+        socket.on('disconnect', () => {
+            connectUsers.forEach((el, index, array) => {
+                if (el.userId === newUser) {
+                    connectUsers.splice(index, 1)
+                }
+                console.log(connectUsers)
+            })
+        })
+
 
 
         }

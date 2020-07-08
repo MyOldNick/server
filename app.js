@@ -24,6 +24,6 @@ app.use('/hello', (req, res) => {
 
 //важная фигня!!111 рас рас адын адын
 //нужно писать именно SERVER, а не app
-server.listen(5000, () => {
+server.listen(3000, () => {
     console.log('server start');
 })
