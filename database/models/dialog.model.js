@@ -4,9 +4,7 @@ const {Schema, model} = require('mongoose');
 //здесь еще нужно добавить поля "обновлено тагдата" и "новыесабщеньки" для того, чтобы сортировать диалоги на клиенте и сделать счетчик новых сообщений
 
 const dialogSchema = new Schema({
-    users: [
-        {userId: String, name: String}
-        ],
+    users: Array,
     message: [{
         id: String,
         text: String,

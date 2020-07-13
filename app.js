@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const path = require('path')
+const fileUpload = require('express-fileupload')
 module.exports = server = require('http').createServer(app); //делаем такой колхоз чтобы передать server в файлик с сокетами
 
 const socketOn = require('./sockets')
@@ -12,11 +14,13 @@ connectToDB()
 
 socketOn() //это включает сокеты
 
+app.use(fileUpload({}))
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
+
 
 app.use('/', usersRouter)
-
 app.use('/hello', (req, res) => {
     res.json('Hello')
 })
@@ -24,6 +28,6 @@ app.use('/hello', (req, res) => {
 
 //важная фигня!!111 рас рас адын адын
 //нужно писать именно SERVER, а не app
-server.listen(process.env.PORT || 3000, () => {
+server.listen(3000, () => {
     console.log('server start');
 })

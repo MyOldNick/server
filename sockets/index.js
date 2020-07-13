@@ -1,12 +1,12 @@
 const server = require('../app')
 const io = require('socket.io')(server)
 
-const {dialogsService} = require('../services')
+const {dialogsService, usersService} = require('../services')
 
 
 function socketOn() {
 
-    let connectUsers = []
+    const connectUsers = []
 
     io.on('connection', (socket) => {
 
@@ -25,7 +25,27 @@ function socketOn() {
 
             //находим в базе диалоги по запросу и отправляем на клиент
             socket.on('dialogs', async id => {
-                const dialogsArr = await dialogsService.findDialogs(id)
+
+                let dialogsArr = await dialogsService.findDialogs(id)
+
+
+                await Promise.all(dialogsArr.map(async el => {
+
+
+                let newUsersArray = []
+
+
+                    await Promise.all(el.users.map(async value => {
+                        const info = await usersService.findUserById(value.userId)
+
+                        newUsersArray.push(info)
+                    }))
+
+                    el.users = newUsersArray
+
+                }))
+
+
 
                 socket.emit('findDialog', dialogsArr)
             })

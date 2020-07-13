@@ -1,6 +1,8 @@
 const {hashPassword, checkPassword} = require('../../helpers')
 const {usersService} = require('../../services')
-
+const uuid = require('uuid').v1()
+const fs = require('fs-extra').promises
+const path = require('path')
 //тут нужно добавить обработку ошибок, но мне лень
 
 module.exports = {
@@ -43,5 +45,26 @@ module.exports = {
         const users = await usersService.findUsers()
 
         res.json(users)
+    },
+
+    updateAvatar: async (req, res) => {
+        const id = req.body.id
+        const [avatar] = req.photo
+
+        const photoDir = `users/${id}/photos`
+
+        const fileExtension = avatar.name.split('.').pop()
+
+        const photoName = `${uuid}.${fileExtension}`
+
+        await fs.mkdir(path.resolve(process.cwd(), 'public', photoDir), {recursive: true})
+        await avatar.mv(path.resolve(process.cwd(), 'public', photoDir, photoName))
+
+        const newAvatar = `${photoDir}/${photoName}`
+
+        await usersService.updateAvatar(id, newAvatar)
+
+
+        res.json('ok')
     }
 }
