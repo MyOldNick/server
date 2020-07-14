@@ -10,7 +10,7 @@ router.post('/auth', usersController.authUser)
 
 router.get('/users', usersController.findAllUsers)
 
-router.patch('/avatar', checkAvatar, checkPhotosCount, usersController.updateAvatar)
+router.put('/avatar', checkAvatar, checkPhotosCount, usersController.updateAvatar)
 
 
 

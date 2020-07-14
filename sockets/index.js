@@ -32,7 +32,7 @@ function socketOn() {
                 await Promise.all(dialogsArr.map(async el => {
 
 
-                let newUsersArray = []
+                    let newUsersArray = []
 
 
                     await Promise.all(el.users.map(async value => {
@@ -54,10 +54,21 @@ function socketOn() {
             socket.on('createDialog', async (userOne, userTwo) => {
                 const dialog = await dialogsService.existenceDialog(userOne.id, userTwo._id)
                 console.log(dialog)
+
                 if(dialog.length > 0) {
                     console.log('Диалог есть')
                 } else {
                     const newDialog = await dialogsService.createDialog(userOne, userTwo)
+
+                    let newUsersArray = []
+
+                    await Promise.all( newDialog.users.map(async el => {
+                        let userInfo = await usersService.findUserById(el.userId)
+
+                        newUsersArray.push(userInfo)
+                    }))
+
+                    newDialog.users = newUsersArray
 
                     connectUsers.map(el => {
                         if (el.userId === userTwo._id) {

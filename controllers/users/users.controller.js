@@ -31,7 +31,7 @@ module.exports = {
         //чекаем пароль, если все ок, отправляем логин пользователя на клиент. Больше ничего
         if(user) {
             await checkPassword(password, user.password)
-            res.json({login: user.login, id: user._id})
+            res.json({login: user.login, id: user._id, avatar: user.avatar, email: user.email})
         } else {
             res.json('Not found')
         }
@@ -49,6 +49,8 @@ module.exports = {
 
     updateAvatar: async (req, res) => {
         const id = req.body.id
+
+        console.log(req.files)
         const [avatar] = req.photo
 
         const photoDir = `users/${id}/photos`
