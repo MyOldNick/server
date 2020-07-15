@@ -13,9 +13,14 @@ function socketOn() {
            let newUser
 
             //отправляем сообщеньку на килент, типо он подключен (это бесполезная фигня)
-            socket.on('connected', connectionUser => {
+            socket.on('connected', async connectionUser => {
                 newUser = connectionUser
+
                 connectUsers.push({id: socket.id, userId: connectionUser})
+
+                await usersService.onlineStatus(connectionUser, true)
+
+                //usersService.findUserById(connectionUser)
             })
 
 
@@ -103,11 +108,14 @@ function socketOn() {
             })
 
         socket.on('disconnect', () => {
-            connectUsers.forEach((el, index, array) => {
+            connectUsers.forEach(async (el, index, array) => {
+
                 if (el.userId === newUser) {
+
                     connectUsers.splice(index, 1)
+
+                   await  usersService.onlineStatus(el.userId, false)
                 }
-                console.log(connectUsers)
             })
         })
 
