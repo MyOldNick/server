@@ -57,7 +57,7 @@ function socketOn() {
 
 
             socket.on('createDialog', async (userOne, userTwo) => {
-                const dialog = await dialogsService.existenceDialog(userOne.id, userTwo._id)
+                const dialog = await dialogsService.existenceDialog(userOne._id, userTwo._id)
                 console.log(dialog)
 
                 if(dialog.length > 0) {
@@ -102,9 +102,11 @@ function socketOn() {
 
                 await dialogsService.sendMessage(message, room, date)
 
+                const newMessage = await dialogsService.findLastMessage(room)
+
 
                 //отправить сообщение всем, кто подключен к определенной комнате
-                io.sockets.in(room).emit('msg', message, room)
+                io.sockets.in(room).emit('msg', newMessage.message[0], room)
             })
 
         socket.on('disconnect', () => {
@@ -114,7 +116,7 @@ function socketOn() {
 
                     connectUsers.splice(index, 1)
 
-                   await  usersService.onlineStatus(el.userId, false)
+                    await  usersService.onlineStatus(el.userId, false)
                 }
             })
         })

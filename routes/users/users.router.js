@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const router = Router();
 const {usersController} = require('../../controllers')
-const {checkAvatar, checkPhotosCount} = require('../../middlewares')
+const {checkAvatar, checkPhotosCount, checkNewUser} = require('../../middlewares')
 
 //тут все изи
 router.post('/register', usersController.createUser)

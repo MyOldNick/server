@@ -1,0 +1,1 @@
+module.exports.userValidate = require('./users/new.user.validate')

@@ -20,4 +20,5 @@ const dialogSchema = new Schema({
     }
 
 })
+
 module.exports = model('dialog', dialogSchema);

@@ -11,17 +11,22 @@ module.exports = {
     createUser: async (req, res, next) => {
         const newUser = req.body
 
-        newUser.password =  await hashPassword(newUser.password)
+        console.log(req.body)
+        console.log("Controller")
 
-        usersService.createUser(newUser)
+        newUser.password = await hashPassword(newUser.password)
 
-        res.json(`User ${newUser.login} create`)
+        const result = await usersService.createUser(newUser)
+
+        if(result) {
+            res.json(`User ${newUser.login} create`)
+        }
 
 
     },
 
     //авторизация, сессий нет, пока что не сделал
-    authUser: async (req, res, next) => {
+    authUser: async (req, res) => {
         const {email, password} = req.body
 
 
@@ -31,7 +36,7 @@ module.exports = {
         //чекаем пароль, если все ок, отправляем логин пользователя на клиент. Больше ничего
         if(user) {
             await checkPassword(password, user.password)
-            res.json({login: user.login, id: user._id, avatar: user.avatar, email: user.email})
+            res.json({login: user.login, _id: user._id, avatar: user.avatar, email: user.email})
         } else {
             res.json('Not found')
         }
@@ -66,7 +71,11 @@ module.exports = {
 
         await usersService.updateAvatar(id, newAvatar)
 
+        const updateUser = await usersService.findUserById(id)
 
-        res.json('ok')
+
+
+
+        res.json(updateUser)
     }
 }
