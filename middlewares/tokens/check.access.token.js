@@ -13,7 +13,8 @@ module.exports = async (req, res, next) => {
 
     jwt.verify(token, 'Mops', (err) => {
         if(err) {
-            throw new Error
+            console.log('not valid token')
+            return next()
 
         }
     })
