@@ -1,8 +1,10 @@
-const {hashPassword, checkPassword} = require('../../helpers')
-const {usersService} = require('../../services')
 const uuid = require('uuid').v1()
 const fs = require('fs-extra').promises
 const path = require('path')
+
+const {hashPassword, checkPassword} = require('../../helpers')
+const {usersService, tokensService} = require('../../services')
+const {createToken} = require('../../helpers')
 //тут нужно добавить обработку ошибок, но мне лень
 
 module.exports = {
@@ -36,11 +38,44 @@ module.exports = {
         //чекаем пароль, если все ок, отправляем логин пользователя на клиент. Больше ничего
         if(user) {
             await checkPassword(password, user.password)
-            res.json({login: user.login, _id: user._id, avatar: user.avatar, email: user.email})
+
+            const tokens = createToken()
+
+            const newTokens = await tokensService.createToken(tokens.refresh_token, tokens.access_token, user._id)
+
+                res.json({login: user.login, _id: user._id, avatar: user.avatar, email: user.email, token: newTokens.access_token})
         } else {
             res.json('Not found')
         }
 
+    },
+
+
+    authToken: async (req, res) => {
+        const userId = req.userId
+
+        console.log(userId)
+
+        if(!userId) {
+            res.json('not found')
+        }
+
+        const user = await usersService.findUserById(userId)
+
+        res.json(user)
+
+
+
+
+    },
+
+
+    logoutUser: async (req, res) => {
+        const access_token = req.get('Authorization')
+
+        await tokensService.deleteToken(access_token)
+
+        res.json('ok')
     },
 
     //тут находим всех пользователей для того, чтобы найти кому писать

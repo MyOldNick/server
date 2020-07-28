@@ -117,6 +117,8 @@ function socketOn() {
                     connectUsers.splice(index, 1)
 
                     await  usersService.onlineStatus(el.userId, false)
+
+                    console.log('disconnected')
                 }
             })
         })

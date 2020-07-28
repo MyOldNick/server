@@ -1,12 +1,16 @@
 const {Router} = require('express');
 const router = Router();
 const {usersController} = require('../../controllers')
-const {checkAvatar, checkPhotosCount, checkNewUser} = require('../../middlewares')
+const {checkAvatar, checkPhotosCount, checkNewUser, checkToken} = require('../../middlewares')
 
 //тут все изи
 router.post('/register', usersController.createUser)
 
+router.post('/token', checkToken, usersController.authToken)
+
 router.post('/auth', usersController.authUser)
+
+router.post('/logout',checkToken , usersController.logoutUser)
 
 router.get('/users', usersController.findAllUsers)
 
