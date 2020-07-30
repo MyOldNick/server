@@ -10,7 +10,7 @@ router.post('/token', checkToken, usersController.authToken)
 
 router.post('/auth', usersController.authUser)
 
-router.post('/logout',checkToken , usersController.logoutUser)
+router.delete('/logout',checkToken , usersController.logoutUser)
 
 router.get('/users', usersController.findAllUsers)
 

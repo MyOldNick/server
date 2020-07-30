@@ -8,7 +8,7 @@ module.exports = {
 
     findUserByEmail: (email) => userModel.findOne({email: email}),
 
-    findUserById: async (id) => await userModel.findOne({_id: id}, {login: 1, avatar: 1, online: 1}),
+    findUserById: async (id) => await userModel.findOne({_id: id}, {login: 1, avatar: 1, online: 1, email: 1}),
 
     //отправляем на клиент только ID и логины пользователей
     findUsers: () => userModel.find({}, {login: 1, avatar: 1}),
