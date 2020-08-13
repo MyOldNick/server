@@ -8,7 +8,11 @@ const dialogSchema = new Schema({
     message: [{
         id: String,
         text: String,
-        author: String
+        author: String,
+        read: {
+            type: Boolean,
+            default: false
+        }
     }],
     quantityNew: {
         type: Number,

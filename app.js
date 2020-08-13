@@ -7,7 +7,7 @@ module.exports = server = require('http').createServer(app); //делаем та
 
 const socketOn = require('./sockets')
 const connectToDB = require('./database')
-const {usersRouter} = require('./routes')
+const {usersRouter, dialogsRouter} = require('./routes')
 
 
 connectToDB()
@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.use('/', usersRouter)
+app.use('/dialogs', dialogsRouter)
 app.use('/hello', (req, res) => {
     res.json('Hello')
 })

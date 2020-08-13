@@ -8,6 +8,20 @@ function socketOn() {
 
     const connectUsers = []
 
+    const deleteConnectUser = (user) => {
+        connectUsers.forEach(async (el, index, array) => {
+
+            if (el.userId === user) {
+
+                connectUsers.splice(index, 1)
+
+                await  usersService.onlineStatus(el.userId, false)
+
+                console.log('disconnected')
+            }
+        })
+    }
+
     io.on('connection', (socket) => {
 
            let newUser
@@ -94,6 +108,14 @@ function socketOn() {
                 console.log(`${user} connected room : ${room}`)
             } )
 
+            socket.on('leaveDialog', (user, room) => {
+
+                socket.leave(room)
+
+                console.log(`${user} disconnected room : ${room}`)
+
+            })
+
             //событие отправки сообщения, room - диалог в который отправляем
             socket.on('message', async (message, room) => {
                 console.log(message, room)
@@ -109,18 +131,15 @@ function socketOn() {
                 io.sockets.in(room).emit('msg', newMessage.message[0], room)
             })
 
+        socket.on('logoutUser', () => {
+
+            deleteConnectUser(newUser)
+        })
+
         socket.on('disconnect', () => {
-            connectUsers.forEach(async (el, index, array) => {
 
-                if (el.userId === newUser) {
+            deleteConnectUser(newUser)
 
-                    connectUsers.splice(index, 1)
-
-                    await  usersService.onlineStatus(el.userId, false)
-
-                    console.log('disconnected')
-                }
-            })
         })
 
 

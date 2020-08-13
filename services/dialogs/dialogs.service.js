@@ -21,6 +21,10 @@ module.exports = {
 
     findLastMessage: (id) => {
         return dialogModel.findOne({_id: id}, {message: {$slice: -1}})
-    }
+    },
+
+    findOneDialog: (dialogId) => dialogModel.findOne({_id: dialogId}),
+
+    updateMessages: (dialogId, messages) => dialogModel.findOneAndUpdate({_id: dialogId}, {message: messages})
 
 }

@@ -6,5 +6,5 @@ module.exports = {
 
     findAccessToken: (access) => tokenModel.findOne({access_token: access}),
 
-    deleteToken: (access) => tokenModel.findOneAndDelete({access_token: access}),
+    deleteToken: (access) => tokenModel.remove({access_token: access}),
 }
